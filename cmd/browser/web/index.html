@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebTransport echo test</title>
+  <link rel="stylesheet" href="/tokens.css">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to test controls</a>
+  <main id="main">
+    <header>
+      <p class="eyebrow">Browser / Go interoperability</p>
+      <h1>WebTransport echo test</h1>
+      <p>Send bytes directly to the Go endpoint over HTTP/3. Each test opens its own
+        session, verifies the complete echo, and closes the connection.</p>
+    </header>
+    <p id="support" role="status">Checking browser support and loading local defaults...</p>
+    <form id="test-form">
+      <fieldset id="controls" disabled>
+        <legend>Connection and payload</legend>
+        <label for="url">Endpoint URL (required)</label>
+        <input id="url" name="url" type="url" required value="https://127.0.0.1:4433/echo"
+          aria-describedby="origin-help error">
+        <p id="origin-help" class="help">The endpoint's allowed origin must match this page: <code id="origin"></code></p>
+        <label for="pin">SHA-256 certificate pin (base64, optional)</label>
+        <input id="pin" name="pin" type="text" spellcheck="false" autocomplete="off" aria-describedby="pin-help error">
+        <p id="pin-help" class="help">Loaded from the local public certificate. Clear only for a publicly trusted endpoint.
+          Obtain replacement pins from a trusted source, not the remote endpoint.</p>
+        <div class="columns">
+          <div>
+            <label for="mode">Transport</label>
+            <select id="mode" name="mode">
+              <option value="all">All three modes</option>
+              <option value="bidirectional">Bidirectional stream</option>
+              <option value="unidirectional">Unidirectional stream</option>
+              <option value="datagram">Datagram</option>
+            </select>
+          </div>
+          <div>
+            <label for="format">Payload format</label>
+            <select id="format" name="format">
+              <option value="hex">Hex bytes</option>
+              <option value="text">UTF-8 text</option>
+            </select>
+          </div>
+        </div>
+        <label for="payload">Payload</label>
+        <textarea id="payload" name="payload" rows="3" aria-describedby="payload-help error">00 ff 80 2a</textarea>
+        <p id="payload-help" class="help">Hex: two digits per byte, separated by spaces (or no spaces).
+          Maximum 64 KiB for streams; datagrams must fit the negotiated limit and may be lost.
+          Each test times out after 10 seconds, including connection setup.</p>
+        <button id="run" type="submit">Run echo test</button>
+      </fieldset>
+      <button id="cancel" type="button" disabled>Cancel test</button>
+    </form>
+    <section aria-labelledby="results-heading">
+      <h2 id="results-heading">Results</h2>
+      <p id="status" role="status">No tests run yet. Choose a payload and run an echo test.</p>
+      <p id="error" role="alert" tabindex="-1" hidden></p>
+      <ol id="results"></ol>
+    </section>
+    <details>
+      <summary>Connection troubleshooting</summary>
+      <p>Use a recent Chrome or Edge on localhost. Start the Go endpoint with
+        <code>-origin http://localhost:8443</code>. Allow loopback UDP on port 4433.</p>
+      <p>If connection setup fails, check endpoint logs, certificate expiration, and the pin.
+        Pinned development certificates must use ECDSA P-256 and be valid for at most 14 days.
+        Use <code>go run ./cmd/certgen</code> to create the supported seven-day certificate.
+        Restart both servers after changing certificates.</p>
+      <p>A datagram timeout can mean packet loss; it is not proof that WebTransport is unsupported.
+        No WebSocket or HTTP fallback is used.</p>
+    </details>
+    <noscript>This test requires JavaScript and browser WebTransport support.</noscript>
+  </main>
+</body>
+</html>

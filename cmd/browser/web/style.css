@@ -1,0 +1,49 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font: var(--body-size)/1.6 system-ui, sans-serif;
+}
+main { max-inline-size: 52rem; margin-inline: auto; padding: var(--space-6) var(--space-4); }
+h1 { font-size: var(--title-size); line-height: 1.2; margin-block: var(--space-2); }
+h2 { font-size: var(--heading-size); }
+p { overflow-wrap: anywhere; }
+header { margin-block-end: var(--space-6); }
+.eyebrow, .help { color: var(--muted); }
+.eyebrow { margin: 0; }
+.help { margin-block: var(--space-2) var(--space-4); }
+fieldset, section, details {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-4);
+  min-inline-size: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+legend { padding-inline: var(--space-2); font-weight: 600; }
+label { display: block; margin-block-end: var(--space-1); font-weight: 600; }
+input, select, textarea, button {
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-block-size: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+}
+input, select, textarea { inline-size: 100%; background: var(--surface); color: var(--text); }
+textarea { resize: vertical; font-family: ui-monospace, monospace; }
+button { cursor: pointer; background: var(--accent); color: var(--on-accent); font-weight: 600; }
+button:disabled { cursor: not-allowed; background: var(--muted); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.columns { display: grid; gap: var(--space-4); margin-block-end: var(--space-4); }
+#cancel { margin-block-end: var(--space-4); }
+#results { padding-inline-start: var(--space-6); }
+#results li { margin-block-end: var(--space-4); overflow-wrap: anywhere; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--body-size); }
+summary { cursor: pointer; min-block-size: 2.75rem; }
+.skip { position: absolute; inset-block-start: -10rem; color: var(--accent); background: var(--surface); padding: var(--space-3); }
+.skip:focus { inset-block-start: 0; }
+@media (min-width: 48rem) {
+  main { padding: var(--space-8); }
+  .columns { grid-template-columns: 1fr 1fr; }
+}
